@@ -1,0 +1,44 @@
+<div>
+    <h1>Home</h1>
+    <h2>Add a product</h2>
+    <form id="formAdd">
+        <input type="text" name="title" placeholder="title" id="productTitle">
+        <input type="text" name="description" placeholder="description" id="productDesc">
+        <input type="text" name="code" placeholder="code" id="productCode">
+        <input type="text" name="price" placeholder="price" id="productPrice"> 
+        <input type="text" name="status" placeholder="status" id="productStatus">
+        <input type="text" name="category" placeholder="category" id="productCategory">
+        <input type="text" name="stock" placeholder="stock" id="productSt">
+        <button type="button" id="botonAdd">Add</button>
+    <h2>Products List</h2>
+    {{#if products}}
+        {{#each products}}
+            <div>
+                <h3>{{this.title}}</h3>
+                <p>description: {{this.description}}</p>
+                <p>price: {{this.price}}</p>
+                <p>category: {{this.category}}</p>
+                <p>stock: {{this.stock}} </p>
+                <p id="idProduct">id: {{this.id}}</p>
+                <button type="button" onclick="addCartProduct('{{this.id}}')" class="botonAgregarCarrito">Agregar al carrito</button>
+            </div>
+        {{/each }} 
+    
+    {{else}}
+        <p>No products found</p>
+    {{/if}}
+</div>
+
+<div>
+<br>
+<br>
+    <p>Pagina Actual: {{page}} </p>
+</div>
+{{#if hasPrevPage}}
+    <a href="/api/v1/products?category={{category}}&page={{prevPage}}&limit={{limit}}&sort={{sort}}">Previous</a>
+{{/if}}
+{{#if hasNextPage}}
+    <a href="/api/v1/products?category={{category}}&page={{nextPage}}&limit={{limit}}&sort={{sort}}">Next</a>
+{{/if}}
+
+<script src="/js/index.js"></script>
