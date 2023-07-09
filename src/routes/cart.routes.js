@@ -23,11 +23,11 @@ export default class cartRoutes {
                         data: cart
                     })
                 }
-                // return res.json({
-                //     message: "Cart retrieved successfully",
-                //     data: cart
-                // })
-                res.render("cart", { cartProducts, cid });
+                return res.json({
+                    message: "Cart retrieved successfully",
+                    data: cart
+                })
+                //res.render("cart", { cartProducts, cid });
             } catch (error) {
                 res.status(400).json({ message: error.message });
             }

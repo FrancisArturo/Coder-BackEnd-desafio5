@@ -1,11 +1,13 @@
 import { Router } from "express";
 import ProductsManager from '../dao/managers/dbManagers/products.manager.js';
 import { authMdw } from "../middleware/auth.middleware.js";
+import CartsManager from "../dao/managers/dbManagers/carts.manager.js";
 
 export default class viewsRoutes {
     path = "/views";
     router = Router();
     productsManager = new ProductsManager()
+    cartManager = new CartsManager()
 
     constructor() {
         this.initializeRoutes();
@@ -30,8 +32,20 @@ export default class viewsRoutes {
             }
         }
         );
-        this.router.get(`${this.path}/cart`, async (req, res) => {
-            res.render("cart");
+        this.router.get(`${this.path}/cart/:cid`, async (req, res) => {
+            try {
+                const { cid } = req.params;
+                const cartProducts = await this.cartManager.getProductsCart(cid);
+                if (cartProducts === "Cart does not exist") {
+                    return res.json({
+                        message: "Cart does not exist",
+                        data: cart
+                    })
+                }
+                res.render("cart", { cartProducts, cid });
+            } catch (error) {
+                res.status(400).json({ message: error.message });
+            }
         }
         );
     }
