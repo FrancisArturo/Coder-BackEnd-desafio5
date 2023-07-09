@@ -34,6 +34,15 @@ export default class sessionRoutes {
         );
         this.router.post(`${this.path}/login`, async (req, res) => {
             try {
+                if (req.body.email === "adminCoder@coder.com" && req.body.password === "adminCod3r123") {
+                    req.session.user = {
+                        firstName: "Admin",
+                        lastName: "Coder",
+                        email: "adminCoder@coder.com",
+                        role: "admin",
+                    };
+                    return res.redirect("/views/home");
+                }
                 const user = await this.userManager.loginUser(req.body);
                 if (user === "User not found") {
                     return res.render("login", {error: "User not found"});
