@@ -36,10 +36,10 @@ export default class sessionRoutes {
             try {
                 const user = await this.userManager.loginUser(req.body);
                 if (user === "User not found") {
-                    res.render("login", {error: "User not found"});
+                    return res.render("login", {error: "User not found"});
                 } else if (user === "Incorrect password") {
-                    res.render("login", {error: "Incorrect password"});
-                } 
+                    return res.render("login", {error: "Incorrect password"});
+                }
                 req.session.user = {
                     firstName: user.firstName,
                     lastName: user.lastName,

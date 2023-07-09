@@ -1,6 +1,9 @@
 <div>
     <h1>Login</h1>
-    <form action="/api/v1/session/login" method="POST">
+    <form action="/api/v1/session/login" method="POST"> 
+    {{#if error}}
+        <p>{{error}}</p>
+    {{/if}}
         <div>
             <label for="email">Email</label><br>
             <input type="email" name="email" id="email" placeholder="Enter email" required><br><br>
