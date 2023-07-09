@@ -138,7 +138,7 @@ export default class cartRoutes {
                     })
                 }
                 return res.json({
-                    message: "Product updated successfully",
+                    message: "Product quantity updated successfully",
                     data: cart
                 })
             } catch (error) {

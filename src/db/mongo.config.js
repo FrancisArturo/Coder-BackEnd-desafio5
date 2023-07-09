@@ -1,5 +1,5 @@
 import { connect } from "mongoose";
-//import { DB_HOST, DB_NAME, DB_PORT, DB_CNN } from "../config/config.js";
+
 
 
 
@@ -10,7 +10,7 @@ const DB_NAME = "ecommercedbSegPreEntrega";
 
 
 
-const configConnection = {
+export const configConnection = {
     url: `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`,
     options: {
         useNewUrlParser: true,

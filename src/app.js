@@ -3,6 +3,10 @@ import displayRoutes from "express-routemap";
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import  connectDB from "./db/mongo.config.js";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import  { configConnection }  from "./db/mongo.config.js";
 
 
 export default class App {
@@ -46,6 +50,17 @@ export default class App {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.static(__dirname + "/public"));
+        this.app.use(cookieParser());
+        this.app.use(session({
+            store: MongoStore.create({
+                mongoUrl: configConnection.url,
+                mongoOptions: configConnection.options,
+                ttl: 600,
+            }),
+            secret: "secretCode",
+            resave: true,
+            saveUninitialized: true
+        }));
     }
     listen() {
         this.server = this.app.listen(this.port, () => {
@@ -57,7 +72,12 @@ export default class App {
     }
     initializeRoutes(routes) {
         routes.forEach((route) => {
-            this.app.use(`/api/${this.API_VERSION}`, route.router);
+            if (route.path === "/views") {
+                this.app.use(`/` , route.router);
+            }else {
+                this.app.use(`/api/${this.API_VERSION}`, route.router);
+                console.log(route.path);
+            }
         });
     }
     initHandlebars() {

@@ -14,17 +14,32 @@ export default class productsRoutes {
     }
 
     initializeRoutes() {
-        this.router.get(`${this.path}`, async (req, res) => {
-            //query para buscar productos por categoria: frutas, lacteos o panificados
-            const { limit = 10, page = 1, category = "all", sort = undefined  } = req.query;
+        //insertar productos a la base de datos
+        this.router.get(`${this.path}/insertion`, async (req, res) => {
             try {
-                const { docs, hasPrevPage, hasNextPage, nextPage, prevPage } = await this.productsManager.getallProducts(limit, page, category, sort);
-                res.render("home", { products : docs, hasPrevPage, hasNextPage, nextPage, prevPage, page, limit, category, sort });
+                const result = await this.productsManager.insertionProducts();
+                res.json({
+                    message: "Products inserted successfully",
+                    data: result
+                })
             } catch (error) {
                 res.status(400).json({ message: error.message });
             }
         }
         );
+        //mostrar todos los productos
+        this.router.get(`${this.path}`, async (req, res) => {
+            //query para buscar productos por categoria: frutas, lacteos o panificados
+            const { limit = 10, page = 1, category = "all", sort = undefined  } = req.query;
+            try {
+                const { docs, hasPrevPage, hasNextPage, nextPage, prevPage } = await this.productsManager.getallProducts(limit, page, category, sort);
+                res.render("home", { products : docs, hasPrevPage, hasNextPage, nextPage, prevPage, page, limit, category, sort, user });
+            } catch (error) {
+                res.status(400).json({ message: error.message });
+            }
+        }
+        );
+        //mostrar un producto por id
         this.router.get(`${this.path}/:pid`, async (req, res) => {
             try {
                 const { pid } = req.params;
@@ -43,6 +58,7 @@ export default class productsRoutes {
             }
         }
         );
+        //borrar un producto por id
         this.router.delete(`${this.path}/:pid`, async (req, res) => {
             try {
                 const { pid } = req.params;
@@ -62,6 +78,7 @@ export default class productsRoutes {
             }
         }
         );
+        //agregar un producto
         this.router.post(this.path, async (req, res) => {
             try {
                 const { body } = req;
@@ -81,7 +98,7 @@ export default class productsRoutes {
             }
         }
         );
-        
+        //actualizar un producto por id
         this.router.put(`${this.path}/:pid`, async (req, res) => {
             try {
                 const { pid } = req.params;

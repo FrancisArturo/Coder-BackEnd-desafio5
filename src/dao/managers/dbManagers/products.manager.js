@@ -1,6 +1,16 @@
 import { productsModel } from '../../models/products.models.js';
+import products from '../../../files/products.js';
 
 export default class ProductsManager {
+    insertionProducts = async () => {
+        try {
+            const result = await productsModel.insertMany(products);
+            return result;
+        } catch (error) {
+            throw new Error("Error inserting products");
+        }
+    }
+            
     getallProducts = async (limit, page, category, sort) => {
         try {
             if (category === "all") {
